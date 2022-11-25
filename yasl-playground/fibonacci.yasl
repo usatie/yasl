@@ -1,0 +1,22 @@
+#!yasl
+
+{ = print "\n" print } println
+{ # #(print " " print) "" println } print_all
+{
+	// if (n < 0) return -1;
+	(= 0 <) ? (! -1) :
+	(
+		// else if (n <= 1) return n;
+		(= 2 <=) ? () :
+		(
+			// else return fib(n-2) + fib(n-1);
+			(= 1 - fib) (2 ^) (2 - fib) +
+		)
+	)
+} fib
+
+#!
+
+// while (1) { n = read; if (n == "exit\n") exit(0); print(fib(n)) }
+1
+@(read ! (= "exit\n" == ? (0 exit)) fib "Answer:" print_all 1)
