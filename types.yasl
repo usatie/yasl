@@ -1,0 +1,7 @@
+#!yasl
+
+"string"
+42
+3.5
+#
+#print
