@@ -1,0 +1,6 @@
+#!yasl
+
+// yasl exit.yasl; echo $?
+
+42
+exit
