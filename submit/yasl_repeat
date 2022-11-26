@@ -13,11 +13,12 @@
 	print  // print(n)
 	"," print
 	print  // print(str)
-	")\n"
+	")\n" print
 } print_repeat
 
 // main(int argc, char *argv[])
 0:9         // push 0 to stack 9
+2 -			// argc -= 2
 #(1:9)      // push 1 to stack 9 `argc` times
 
 !           // drop argv[0]
@@ -26,5 +27,6 @@ eval:8
 print_stack
 9:(@(
 	8:=:0
-	print_repeat
+	0:print_repeat
+	8:(1 +):8		//increment stack:8
 ))
