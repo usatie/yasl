@@ -1,0 +1,17 @@
+#!yasl
+
+// $> ./yasl_aff_param Hello World 42 "Be Cool"
+// Hello
+// World
+// 42
+// Be Cool
+
+{
+	print
+	"\n" print
+} println
+
+!       // drop argc
+!       // drop argv[0]
+#       // push stack size
+#println
