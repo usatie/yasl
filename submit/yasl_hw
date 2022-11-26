@@ -1,4 +1,8 @@
 #!yasl
 
-{"Hello world\n" print}print_hw
-print_hw
+{
+	print
+	"\n" print
+} println
+
+"Hello world" println
