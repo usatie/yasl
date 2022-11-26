@@ -14,13 +14,13 @@
 // main(int argc, char *argv[])
 0:1         // push 0 to stack 1
 2 -			// argc -= 2
-#(1:1)      // push 1 to stack 1 `argc` times
+3 !^        // unroll (argc, argv[0], argv[1]) -> (argv[0], argv[1], argc)
 
 !           // drop argv[0]
 
-eval:2		// move argv[1](start_num) to stack2
-1:(@(
-	2:=:0
-	0:print_repeat
-	2:(1 +):2		//increment stack:2
-))
+eval:2		// move argv[1](repeat_num) to stack2
+#(
+	2:=           // push `repeat_num` to stack 0
+	print_repeat  // print_repeat(repeat_num, argv[i])
+	2:(1 +):2     // repeat_num++
+)
