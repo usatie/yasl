@@ -1,0 +1,29 @@
+#!yasl
+
+#!
+{
+	print "\n" print
+} println
+
+// print_stack(stack_id)
+{
+	("print_stack:\n" print)       // printf("print_stack %d :\n", stack_id)
+	#
+	(#=):8
+	8:#:8
+	8:(#(= !)):9
+	9:(# #(print "\n" print)):9
+} print_stack
+
+// 1. split
+"[split]" println
+"hello" ][
+print_stack
+# #! // clear stack
+
+// 2. join
+"" println
+"[join]" println
+"a" "b" "c" "d" + + +
+print_stack
+# #! // clear stack
