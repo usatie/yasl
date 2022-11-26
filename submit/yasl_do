@@ -3,7 +3,9 @@
 !            // drop argc
 !            // drop argv[0]
 
-=:1 !      // move argv[1] to stack 1
+eval =:1 !      // move argv[1] to stack 1
 =:2 !      // move argv[2] to stack 2
-=:1 !      // move argv[3] to stack 1
-print_stack
+eval =:1 !      // move argv[3] to stack 1
+2:=:1 2:!  // move argv[2] from stack2 to stack1
+1:eval
+print
