@@ -4,6 +4,12 @@
 // BonjourBonjourBonjourBonjour
 // how are you ?how are you ?how are you ?how are you ?how are you ?
 
+// void err_exit(char *str)
+{
+	print    // print(str)
+	1 exit   // exit(1)
+} err_exit
+
 // void print_repeat(int n, char *str)
 {
 	#(= print)		// print str n times
@@ -12,15 +18,21 @@
 } print_repeat
 
 // main(int argc, char *argv[])
-0:1         // push 0 to stack 1
+// if (argc <= 2) err_exit("Error\n");
+= 2 <= ? ("Error\n" err_exit)
 2 -			// argc -= 2
 3 !^        // unroll (argc, argv[0], argv[1]) -> (argv[0], argv[1], argc)
 
 !           // drop argv[0]
 
-eval:2		// move argv[1](repeat_num) to stack2
+// if (argv[1] <= 0) err_exit("Error\n");
+// TODO: handle when argv[1] is "3abc"
+= 0 <= ? ("Error\n" err_exit)
+
+1 + 1 -     // push atoi(argv[1])
+(= !):1		// move repeat_num to stack1
 #(
-	2:=           // push `repeat_num` to stack 0
+	1:=           // push `repeat_num` to stack 0
 	print_repeat  // print_repeat(repeat_num, argv[i])
-	2:(1 +):2     // repeat_num++
+	1:(1 +):1     // repeat_num++
 )
