@@ -4,26 +4,23 @@
 // BonjourBonjourBonjourBonjour
 // how are you ?how are you ?how are you ?how are you ?how are you ?
 
-// keep argc
-// keep argv[1]
-
 // void print_repeat(int n, char *str)
 {
 	#(= print)		// print str n times
-	!				// reset str
+	!				// remove str
 	"\n"print		// print newline
 } print_repeat
 
 // main(int argc, char *argv[])
-0:9         // push 0 to stack 9
+0:1         // push 0 to stack 1
 2 -			// argc -= 2
-#(1:9)      // push 1 to stack 9 `argc` times
+#(1:1)      // push 1 to stack 1 `argc` times
 
 !           // drop argv[0]
 
-eval:8
-9:(@(
-	8:=:0
+eval:2		// move argv[1](start_num) to stack2
+1:(@(
+	2:=:0
 	0:print_repeat
-	8:(1 +):8		//increment stack:8
+	2:(1 +):2		//increment stack:2
 ))
