@@ -1,0 +1,30 @@
+#!yasl
+
+// $> ./yasl_repeat 4 Bonjour "how are you ?"
+// BonjourBonjourBonjourBonjour
+// how are you ?how are you ?how are you ?how are you ?how are you ?
+
+// keep argc
+// keep argv[1]
+
+// void print_repeat(int n, char *str)
+{
+	"print_repeat(" print
+	print  // print(n)
+	"," print
+	print  // print(str)
+	")\n"
+} print_repeat
+
+// main(int argc, char *argv[])
+0:9         // push 0 to stack 9
+#(1:9)      // push 1 to stack 9 `argc` times
+
+!           // drop argv[0]
+
+eval:8
+print_stack
+9:(@(
+	8:=:0
+	print_repeat
+))
