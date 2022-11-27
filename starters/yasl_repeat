@@ -1,0 +1,76 @@
+#!yasl
+
+// $> ./yasl_repeat 4 Bonjour "how are you ?"
+// BonjourBonjourBonjourBonjour
+// how are you ?how are you ?how are you ?how are you ?how are you ?
+
+// void err_exit(char *str)
+{
+	print    // print(str)
+	1 exit   // exit(1)
+} err_exit
+
+// bool isdigit(char c)
+{
+	(= "0" <) ? (        // if (c < '0')
+		! 0              //    return 0
+	) : ( ("9" >) ? (    // else if (c > '9')
+		0                //    return 0
+	) : (                // else
+		1                //    return 1
+	)
+	)
+} isdigit
+
+// bool isnumber(char *s)
+{
+	1:9                      // ans = true
+	][
+	(= 0 >) ? (              // if (s.size() > 0)
+		#(                   //    for (c in s)
+			isdigit          //       isdigit = isdigit(c)
+			(= !):9 9:*:9    //    ans = ans && isdigit
+		)
+	) : (                    // else
+		!                    //    drop 0
+		9:! 0:9              //    ans = false
+	)
+	9:(= !)              // return ans
+} isnumber
+
+// void print_repeat(int n, char *str)
+{
+	#(= print)		// print str n times
+	!				// remove str
+	"\n"print		// print newline
+} print_repeat
+
+// main(int argc, char *argv[])
+{
+	(= 2 <=) ? (               // if (argc <= 2)
+		"Error\n" err_exit     //   err_exit("Error\n");
+	)
+	2 -			               // argc -= 2
+	3 !^                       // unroll (argc, argv[0], argv[1]) -> (argv[0], argv[1], argc)
+
+	!                          // drop argv[0]
+
+	
+	(= isnumber 0 ==) ? (      // if (isnumber(argv[1]) == 0)
+		"Error\n" err_exit     //   err_exit("Error\n");
+	)
+	eval                       // n = atoi(argv[1])
+	(= 0 <=) ? (               // if (n <= 0)
+		"Error\n" err_exit     //   err_exit("Error\n")
+	)
+
+	1 + 1 -                    // push atoi(argv[1])
+	(= !):1		               // move repeat_num to stack1
+	#(
+		1:=                    // push `repeat_num` to stack 0
+		print_repeat           // print_repeat(repeat_num, argv[i])
+		1:(1 +):1              // repeat_num++
+	)
+} main
+
+main

@@ -9,6 +9,6 @@ cond @(           // while (1)
 	(0 ==) ? (    // if (rc == 0)
 		0 exit    //    exit(0)
 	)
-	eval          // print(buf)
+	eval          // eval(buf)
 	cond          // continue
 )
