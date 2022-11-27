@@ -1,0 +1,34 @@
+#!yasl
+
+# #! // drop args
+
+{ "　" } sq
+
+{
+	print
+	"\n" print
+} println
+
+// This will print "hello" (r=20, g=30, b=50)
+// print("\e[48;2;20;30;50mhello\e[m\n")
+// https://unix.stackexchange.com/questions/608538/how-to-use-256-colors-for-background-color-in-terminal
+// void println_rgb(int r, int g, int b, char *str)
+{
+	"\e[48;2;"                          // fmt = "\e[48;2;"
+	(2 ^) (= 0 ==) ? (! "0") : ("" +) + // fmt += itoa(r)
+	";" +                               // fmt += ";"
+	(2 ^) (= 0 ==) ? (! "0") : ("" +) + // fmt += itoa(g)
+	";" +                               // fmt += ";"
+	(2 ^) (= 0 ==) ? (! "0") : ("" +) + // fmt += itoa(b)
+	"m" +                               // fmt += "m"
+	2 ^ +                               // fmt += str
+	"\e[m" +                            // fmt += "\e[m"
+	println                             // println(fmt)
+} println_rgb
+
+"hello world 42 Tokyo" 0 255 255 println_rgb
+sq 255 255 255 println_rgb
+sq 255 0 0 println_rgb
+sq 0 255 0 println_rgb
+sq 0 0 255 println_rgb
+sq 20 30 50 println_rgb
