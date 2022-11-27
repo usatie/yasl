@@ -116,9 +116,8 @@
 	8:! 7:! 6:! 5:!
 	9:(= !)
 	// normalize range between 14 to 100
-	14 -
+	14 - 255 * 86 /
 	(= 0 <) ? (! 0)
-	255 * 86 /
 } mandel_speed
 
 // int main(int argc, char *argv[])
@@ -129,9 +128,9 @@
 	1:= #(                    // while (_ in 1...x)
 		-1.5:2 // x = -1.5
 		1:= #(                //    while (_ in 1...x)
-			"x: " print 2:= print ", y: " print 3:= print
+			//"x: " print 2:= print ", y: " print 3:= print
 			3:= 2:= mandel_speed // mandel_speed(x, y)
-			" " print = print "\n" print
+			//" " print = print "\n" print
 			0 0
 			sq:4              // push sq to stack 4
 			3 #((= !):4)      // push r,g,b to stack 4
