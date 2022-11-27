@@ -1,0 +1,150 @@
+#!./yasl
+
+// char sq(void)
+{ " " } sq
+
+// void println(char *str)
+{
+	print
+	"\n" print
+} println
+
+// void err_exit(char *str) __attribute__((noreturn))
+{
+	print        // print(str)
+	"\n" print   // println()
+	1 exit       // exit(1)
+} err_exit
+
+// This will print "hello" (r=20, g=30, b=50)
+// print("\e[48;2;20;30;50mhello\e[m\n")
+// https://unix.stackexchange.com/questions/608538/how-to-use-256-colors-for-background-color-in-terminal
+// void print_rgb(int r, int g, int b, char *str)
+{
+	"\e[48;2;"                          // fmt = "\e[48;2;"
+	(2 ^) (= 0 ==) ? (! "0") : ("" +) + // fmt += itoa(r)
+	";" +                               // fmt += ";"
+	(2 ^) (= 0 ==) ? (! "0") : ("" +) + // fmt += itoa(g)
+	";" +                               // fmt += ";"
+	(2 ^) (= 0 ==) ? (! "0") : ("" +) + // fmt += itoa(b)
+	"m" +                               // fmt += "m"
+	2 ^ +                               // fmt += str
+	"\e[m" +                            // fmt += "\e[m"
+	print                               // print(fmt)
+} print_rgb
+
+// bool isalpha_upper(char c)
+{
+	(= "A" >=) 2 ^   // cond1 = (c >= 'A')
+	(  "Z" <=)       // cond2 = (c <= 'Z')
+	*                // return (cond1 && cond2)
+} isalpha_upper
+
+// bool isalpha_lower(char c)
+{
+	(= "a" >=) 2 ^   // cond1 = (c >= 'a')
+	(  "z" <=)       // cond2 = (c <= 'z')
+	*                // return (cond1 && cond2)
+} isalpha_lower
+
+// bool isdigit(char c)
+{
+	(= "0" >=) 2 ^   // cond1 = (c >= '0')
+	(  "9" <=)       // cond2 = (c <= '9')
+	*                // return (cond1 && cond2)
+} isdigit
+
+// int base64_to_uint8(char hex)
+{
+	(= isalpha_upper) ? (              // if ('A' <= c && c <= 'Z')
+		"A" -                          //     return (c - 'A')
+	) : ( (= isalpha_lower) ? (        // else if ('a' <= c && c <= 'z')
+		"a" - 26 +                     //     return (c - 'a' + 26)
+	) : ( (= isdigit) ? (              // else if ('0' <= c && c <= '9')
+		"0" - 52 +                     //     return (c - '0' + 52)
+	) : ( (= "+" ==) ? (               // else if (c == '+')
+		! 62                           //     return 62;
+	) : ( (= "/" ==) ? (               // else if (c == '/')
+		! 63                           //     return 63;
+	) : (                              // else
+		"Error" err_exit               //     err_exit("Error")
+	)
+	))))
+} base64_to_uint8
+
+// (int r, int g, int b) base64_to_rgb(char s[4])
+{
+	4 #( base64_to_uint8 (= !):9 )
+	9:(
+		(
+			(  077 &) (2 <<) (= !):0       // n1 = (s[0] & 077) << 2
+			(= 060 &) (4 >>) (= !):0       // n2 = (s[1] & 060) >> 4
+			0:(+):0                        // (n1 + n2)
+		)
+		(
+			(  017 &) (4 <<) (= !):0        // n1 = (s[1] & 017) << 4
+			(= 074 &) (2 >>) (= !):0        // n2 = (s[2] & 074) >> 2
+			0:(+):0                         // (n1 + n2)
+		)
+		(
+			(  003 &) (6 <<) (= !):0        // n1 = (s[2] & 003) << 6
+			(077 &) (0 >>) (= !):0          // n2 = (s[3] & 077) >> 0
+			0:(+):0                         // (n1 + n2)
+		)
+	):9
+} base64_to_rgb
+
+// int mandel_speed(float x, float y)
+{
+	0.0:8         // x = 0.0
+	0.0:7         // y = 0.0
+	(= !):6         // mov c.x = x
+	(= !):5         // mov c.y = y
+	9:(
+		0         // i = 0
+		(= 100 <) @(      // while (i < max_loop)
+			(8:= = *) (7:= = *) - 6:= + // xx = x*x - y*y + c.x
+			(8:= 7:= 2.0 * *) 5:= +       // yy = 2 * x * y + c.y
+			8:! 7:! (= !):7 (= !):8             // x = xx, y = yy
+			8:((= 10000000000000000 >) (= !):9):8  // isinf(x)
+			7:((= 10000000000000000 >) (= !):9):7  // isinf(y)
+			8:((= -10000000000000000 <) (= !):9):8  // isinf(x)
+			7:((= -10000000000000000 <) (= !):9):7  // isinf(y)
+			(+ + +) ? (0) : (1 + (= 100 <))       // if (isinf) n = 0 else i += 1
+		)
+	):9
+	8:! 7:! 6:! 5:!
+	9:(= !)
+	// normalize range between 14 to 100
+	14 -
+	(= 0 <) ? (! 0)
+	255 * 86 /
+} mandel_speed
+
+// int main(int argc, char *argv[])
+{
+	# #!
+	100:1
+	1.0:3    // y = 1.0
+	1:= #(                    // while (_ in 1...x)
+		-1.5:2 // x = -1.5
+		1:= #(                //    while (_ in 1...x)
+			"x: " print 2:= print ", y: " print 3:= print
+			3:= 2:= mandel_speed // mandel_speed(x, y)
+			" " print = print "\n" print
+			0 0
+			sq:4              // push sq to stack 4
+			3 #((= !):4)      // push r,g,b to stack 4
+			2:(0.02 +):2      // x += 0.01
+		)
+		3:(0.02 -):3          // y += 0.01
+	)
+	1:= #(                    // while (_ in 1...x)
+		1:= #(                //    while (_ in 1...x)
+			4:print_rgb:4     // print square char with color
+		)
+		"" println            // println("")
+	)
+} main
+
+main
