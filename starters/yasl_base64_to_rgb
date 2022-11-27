@@ -55,7 +55,7 @@
 		"0" - 52 +                     //     return (c - '0' + 52)
 	) : ( (= "+" ==) ? (               // else if (c == '+')
 		! 62                           //     return 62;
-	) : ( (= "-" ==) ? (               // else if (c == '-')
+	) : ( (= "/" ==) ? (               // else if (c == '/')
 		! 63                           //     return 63;
 	) : (                              // else
 		"Error" err_exit               //     err_exit("Error")
