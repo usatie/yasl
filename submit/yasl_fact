@@ -1,0 +1,99 @@
+#!./yasl
+
+// void err_exit(char *str) __attribute__((noreturn))
+{
+	print        // print(str)
+	"\n" print   // println()
+	1 exit       // exit(1)
+} err_exit
+
+// bool isdigit(char c)
+{
+	(= "0" <) ? (        // if (c < '0')
+		! 0              //    return 0
+	) : ( ("9" >) ? (    // else if (c > '9')
+		0                //    return 0
+	) : (                // else
+		1                //    return 1
+	)
+	)
+} isdigit
+
+// bool isnumber(char *s)
+{
+	1:9                      // ans = true
+	][
+	(= 0 >) ? (              // if (s.size() > 0)
+		#(                   //    for (c in s)
+			isdigit          //       isdigit = isdigit(c)
+			(= !):9 9:*:9    //    ans = ans && isdigit
+		)
+	) : (                    // else
+		!                    //    drop 0
+		9:! 0:9              //    ans = false
+	)
+	9:(= !)              // return ans
+} isnumber
+
+// int INT_MAX(void)
+{
+	(1 63 <<) 1 - // (2^63 - 1)
+} INT_MAX
+
+// check if x * y can overflow
+// bool can_overflow(int x, int y)
+{
+	(INT_MAX 2 ^ /) >      // y > (INT_MAX / x)
+} can_overflow
+
+// Returns -1 on overflow
+// int fact(int n)
+{
+	(= 0 <)                   // if (n < 0)
+	? (! -1)                  //   return -1
+	: (                       // else
+		(= 0 ==) ? (          //   if (n == 0)
+			! 1               //     return 1
+		) : (                 //   else
+			(= 1 - fact)      //   fact(n-1)
+			(= 0 <) ? (       //   if (fact(n-1) < 0)
+				              //     return -1
+			) : (             //   else
+				(=:9) (2 ^ =:9)   //   dup n and fact(n-1) to stack 9
+				9:can_overflow:9  //   can_overflow(n, fact(n-1))
+				9:(= !) ? (       //   if (can_overflow)
+					! -1            //     return -1
+					//"fact(): \n" print print_stack
+				) : (             //   else
+					//"fact(): \n" print print_stack
+					*             //     return (n * fact(n-1))
+				)
+			)
+		)              
+	)
+} fact
+
+// void main(int argc, char *argv[])
+{
+	(2 !=) ? (                  // if (argc != 2)
+		"Error" err_exit        //   err_exit("Error")
+	)
+
+	!                           // drop argv[0]
+
+	(= isnumber) ? () : (       // if (!isnumber(argv[1]))
+		"Error" err_exit        //   err_exit("Error")
+	)
+	(= 0 <) ? (                 // if (atoi(argv[1]) < 0)
+		"Error" err_exit        //   err_exit("Error")
+	)
+
+	eval                        // n = atoi(argv[1])
+	fact                        // answer = fact(n)
+	(= -1 ==) ? (               // if overflow
+		"Overflow" err_exit     //   err_exit("Overflow")
+	)
+	print                       // print(answer)
+} main
+
+main
