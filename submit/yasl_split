@@ -1,0 +1,66 @@
+#!./yasl
+
+// $> ./yasl_split " " " Lorem ipsum dolor sit amet, consectetur adipiscing elit. "
+
+// void println(char *str)
+{
+	print       // print(str)
+	"\n" print  // print("\n")
+} println
+
+// void err_exit(char *str) __attribute__((noreturn))
+{
+	print        // print(str)
+	"\n" print   // println()
+	1 exit       // exit(1)
+} err_exit
+
+// char *str_join(char **strs)
+{
+	(# 1 >) ? (               // if (stack.size() > 1)
+		# 1 - #(              //   for (1 to (stack.size() - 1))
+			2 ^ +             //     res += stack[i]
+		)    
+	)  
+} str_join
+
+// char *[]split(char sep, char *str)
+{
+	(= !):1                              // move sep to stack 1
+	(= !):2                              // move str to stack 2
+	2:(
+		][ #( (= !):3                    // for (c in str)    // c is on stack 3
+			3:(
+				(= 1:= ==) ? (           // if (c == sep)
+					!                    //   drop c
+					(# 1 >) ? (str_join) //   if (stack.size() > 1) str_join(stack)
+					(# 0 >) ? (= !):0    //   if (joined_result) push to stack 0
+				) : (                    // else
+					()                   //   leave c on stack 3
+				)
+			):3
+		)
+	):2
+
+	3:(                        // When string is left on stack 3
+		(# 1 >) ? (str_join)   // if (stack.size() > 1) str_join(stack)
+		(# 0 >) ? (= !):0      // if (joined_result) push to stack 0
+	):3
+} split
+
+// int main(intargc,char*argv[])
+{
+	(3 !=) ? (              // if (argc != 3)
+		"Error" err_exit    //    err_exit("Error")
+	)
+
+	!                       // drop argv[0]
+
+	([#] 1 !=) ? (          // if (len(argv[1]) != 1)
+		"Error" err_exit    //    err_exit("Error")
+	)
+	split                   // split(argv[1], argv[2])
+	# #println              // for (s in stack) println(s)
+} main
+
+main
