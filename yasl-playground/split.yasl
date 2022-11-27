@@ -1,0 +1,40 @@
+#!yasl
+#!
+
+{
+	{ # 1 > } loop_cond       // stack.size() > 1
+	loop_cond @( + loop_cond) // while (loop_cond) { + }
+} join_str
+
+// split(str, sep)
+{
+	(= !):9 // push `str` to 9
+	(= !):8 // push `sep` to 8
+	9:(][ !):9 // split `str`
+	9:(
+		{# 0 >} loop_cond
+		{
+			= 8:= ==          // c == `sep`
+			? (
+				!                       // drop c
+				7:join_str:7            // join_str(7)
+				7:(# 0 > ? (=:0 !)):7   // if (stack_size(7) > 0) push to 0
+			)
+			: (
+				(= !):7                 // push c to 7
+				7:(# 1 > ? (# !^)):7       // if (stack_size(7) > 1) unroll c to bottom
+			)
+		} loop_func
+		loop_cond @(loop_func loop_cond)
+		
+		// if something left on 7, push to 0
+		7:join_str:7            // join_str(7)
+		7:(# 0 > ? (=:0 !)):7   // if (stack_size(7) > 0) push to 0
+	):9
+} split
+
+" "
+" Lorem ipsum dolor sit amet, consectetur adipiscing elit. "
+print_stack
+split
+print_stack

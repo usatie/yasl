@@ -1,4 +1,4 @@
-#!yasl
+#!./yasl
 
 // ./yasl_aff_param Hello World 42 "Be Cool"
 
