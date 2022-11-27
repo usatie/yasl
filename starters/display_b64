@@ -1,4 +1,4 @@
-#!yasl
+#!./yasl
 
 // char sq(void)
 { "　" } sq

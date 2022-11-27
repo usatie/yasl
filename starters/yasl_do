@@ -1,4 +1,4 @@
-#!yasl
+#!./yasl
 
 // $> ./yasl_do <value1> <operator> <value2>
 // $> ./yasl_do 21 + 42

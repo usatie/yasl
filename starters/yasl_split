@@ -1,4 +1,4 @@
-#!yasl
+#!./yasl
 
 // $> ./yasl_split " " " Lorem ipsum dolor sit amet, consectetur adipiscing elit. "
 

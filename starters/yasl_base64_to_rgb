@@ -1,4 +1,4 @@
-#!yasl
+#!./yasl
 
 { "　" } sq
 
@@ -6,6 +6,13 @@
 	print
 	"\n" print
 } println
+
+// void err_exit(char *str) __attribute__((noreturn))
+{
+	print        // print(str)
+	"\n" print   // println()
+	1 exit       // exit(1)
+} err_exit
 
 // This will print "hello" (r=20, g=30, b=50)
 // print("\e[48;2;20;30;50mhello\e[m\n")
@@ -91,7 +98,7 @@
 "d" base64_to_uint8
 "8" base64_to_uint8
 "+" base64_to_uint8
-"-" base64_to_uint8
+"/" base64_to_uint8
 print_stack
 # #!
 "u" "F" "W" "T" base64_to_rgb

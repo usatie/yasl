@@ -1,4 +1,4 @@
-#!yasl
+#!./yasl
 
 // void err_exit(char *str) __attribute__((noreturn))
 {
