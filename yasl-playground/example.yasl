@@ -1,8 +1,0 @@
-#!yasl
-#!
-
-"YASL\n"
-"my name is "
-"Hello, "
-#
-#print

@@ -1,8 +1,0 @@
-#!./yasl
-
-{
-	print
-	"\n" print
-} println
-
-"Hello world" println

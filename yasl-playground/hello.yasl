@@ -1,4 +1,0 @@
-#!yasl
-
-"Hello World\n"
-print
